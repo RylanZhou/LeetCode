@@ -47,10 +47,13 @@ class Solution(object):
         if not length:
             return 0
         
-        match = re.match(r'^\s*[+-]\d+')
+        match = re.match(r'^\s*[+-]?\d+', str)
+        if not match:
+            return 0
+        
         INT_MIN = -pow(2, 31)
         INT_MAX = -INT_MIN - 1
-
+        result = int(match.group())
 
         if result < INT_MIN:
             return INT_MIN
@@ -61,4 +64,4 @@ class Solution(object):
 
 if __name__ == "__main__":
     s = Solution()
-    print(s.myAtoi(".1"))
+    print(s.myAtoi("42"))
