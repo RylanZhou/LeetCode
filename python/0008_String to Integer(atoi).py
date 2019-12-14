@@ -39,14 +39,29 @@
 # Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
 #              Therefore INT_MIN (−2^31) is returned.
 
+import re
+
 class Solution(object):
     def myAtoi(self, str: str) -> int:
-        pos, length = 0, len(str)
-        result = ''
-        while pos < length and not str[pos].isdigit:
-            pos += 1
+        length = len(str)
+        if not length:
+            return 0
+        
+        match = re.match(r'^\s*[+-]?\d+', str)
+        if not match:
+            return 0
+        
+        INT_MIN = -pow(2, 31)
+        INT_MAX = -INT_MIN - 1
+        result = int(match.group())
+
+        if result < INT_MIN:
+            return INT_MIN
+        if result > INT_MAX:
+            return INT_MAX
+        return result
 
 
 if __name__ == "__main__":
     s = Solution()
-    s.myAtoi("-91283472332")
+    print(s.myAtoi("42"))
