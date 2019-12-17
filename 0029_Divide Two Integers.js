@@ -26,12 +26,47 @@ Assume we are dealing with an environment which could only store integers within
  */
 function divide(dividend, divisor) {
   if (!dividend) return dividend
+  let result = 0
+  const sign = dividend > 0 === divisor > 0
+  if (divisor === 1) {
+    result = dividend
+  } else if (divisor === -1) {
+    result = -dividend
+  } else {
+    let dvd = Math.abs(dividend)
+    let dvs = Math.abs(divisor)
+
+    while (dvd >= dvs) {
+      let temp = dvs
+      let shift = 0
+      while (temp <= dvd >> 1) {
+        temp <<= 1
+        shift++
+      }
+      result += 1 << shift
+      dvd -= temp
+    }
+
+    result = sign ? result : ~result + 1 // Equals to result *= -1
+  }
+
+  const MAX_VALUE = 2 ** 31 - 1
+  const MIN_VALUE = -MAX_VALUE - 1
+  if (result < MIN_VALUE || result > MAX_VALUE) {
+    return MAX_VALUE
+  }
+  return result
+}
+
+function divideII(dividend, divisor) {
+  if (!dividend) return dividend
   let count = 0
   if (divisor === 1) {
     count = dividend
   } else {
     let absDividend = Math.abs(dividend)
     let absDivisor = Math.abs(divisor)
+
     while (absDividend >= absDivisor) {
       count++
       absDividend -= absDivisor
@@ -54,7 +89,7 @@ function divide(dividend, divisor) {
 }
 
 function main() {
-  console.log(divide(-2147483648, 1))
+  console.log(divide(-2147483648, -3))
 }
 
 main()
