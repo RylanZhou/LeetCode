@@ -19,7 +19,7 @@ Here are some examples. Inputs are in the left-hand column and its corresponding
 function nextPermutation(nums) {}
 
 const permutation = (array, layer, length, result) => {
-  if (layer === length - 1) {
+  if (layer === length) {
     result.push([...array])
     return
   }
@@ -37,12 +37,36 @@ const permutation = (array, layer, length, result) => {
   }
 }
 
-const permutationLexicography = () => {}
+const permutationLexicography = (
+  usedMap,
+  currentArray,
+  layer,
+  length,
+  result
+) => {
+  if (layer === length) {
+    result.push([...currentArray])
+    return
+  }
+  for (const key in usedMap) {
+    if (!usedMap[key]) {
+      currentArray[layer] = key
+      usedMap[key] = true // Mark as used
+      permutationLexicography(usedMap, currentArray, layer + 1, length, result)
+      usedMap[key] = false // Release mark
+    }
+  }
+}
 
 function main() {
   const array = [1, 2, 3]
   const result = []
   permutation(array, 0, array.length, result)
+  const usedMap = {}
+  for (const each of array) {
+    usedMap[each] = false
+  }
+  // permutationLexicography(usedMap, [], 0, array.length, result)
   console.log(result)
 }
 
