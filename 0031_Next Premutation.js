@@ -12,12 +12,6 @@ Here are some examples. Inputs are in the left-hand column and its corresponding
 1,1,5 → 1,5,1
 ************************************************************ */
 
-/**
- * @param {number[]} nums
- * @return {void} Do not return anything, modify nums in-place instead.
- */
-function nextPermutation(nums) {}
-
 const permutation = (array, layer, length, result) => {
   if (layer === length) {
     result.push([...array])
@@ -37,13 +31,7 @@ const permutation = (array, layer, length, result) => {
   }
 }
 
-const permutationLexicography = (
-  usedMap,
-  currentArray,
-  layer,
-  length,
-  result
-) => {
+function permutationLexicography(usedMap, currentArray, layer, length, result) {
   if (layer === length) {
     result.push([...currentArray])
     return
@@ -58,16 +46,54 @@ const permutationLexicography = (
   }
 }
 
-function main() {
-  const array = [1, 2, 3]
-  const result = []
-  permutation(array, 0, array.length, result)
-  const usedMap = {}
-  for (const each of array) {
-    usedMap[each] = false
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+function nextPermutation(nums) {
+  const length = nums.length
+  if (!length) return
+
+  let k = length - 1
+  // Where is the ascent point?
+  while (k > 0 && nums[k - 1] >= nums[k]) {
+    k--
   }
+  if (k === 0) {
+    // Whole array is descendant
+    nums.reverse()
+    return
+  }
+
+  let j = k
+  // Find which element is going to swap with nums[k - 1]
+  while (j < length) {
+    if (
+      nums[j] > nums[k - 1] &&
+      (nums[j + 1] <= nums[k - 1] || j + 1 === length)
+    ) {
+      let temp = nums[k - 1]
+      nums[k - 1] = nums[j]
+      nums[j] = temp
+      const rest = nums.slice(k).reverse()
+      nums.splice(k, rest.length, ...rest)
+      return
+    }
+    j++
+  }
+}
+
+function main() {
+  const array = [1, 1, 1, 1, 1, 1, 1, 2, 1]
+  // const result = []
+  // permutation(array, 0, array.length, result)
+  // const usedMap = {}
+  // for (const each of array) {
+  //   usedMap[each] = false
+  // }
   // permutationLexicography(usedMap, [], 0, array.length, result)
-  console.log(result)
+  nextPermutation(array)
+  console.log(array)
 }
 
 main()
