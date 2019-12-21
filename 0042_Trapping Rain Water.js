@@ -16,7 +16,37 @@ Output: 6（1 + 4 + 1）
  * @param {number[]} height
  * @return {number}
  */
-function trap(height) {}
+function trap(height) {
+  if (height.length < 3) return 0
+
+  let sum = 0
+  let leftMax = 0
+  let rightMax = 0
+
+  // Starting from both left and right would save time
+  let leftIndex = 0
+  let rightIndex = height.length - 1
+  while (leftIndex < rightIndex) {
+    // If left side is lower, we focus on left side
+    if (height[leftIndex] <= height[rightIndex]) {
+      if (leftMax < height[leftIndex]) {
+        leftMax = height[leftIndex]
+      } else {
+        // The amount of water that could be stored at this bar
+        sum += leftMax - height[leftIndex]
+      }
+      leftIndex++
+    } else {
+      if (rightMax < height[rightIndex]) {
+        rightMax = height[rightIndex]
+      } else {
+        sum += rightMax - height[rightIndex]
+      }
+      rightIndex--
+    }
+  }
+  return sum
+}
 
 // Basic algorithm but it will lead to TLE
 function trapII(height) {
@@ -40,7 +70,7 @@ function trapII(height) {
 }
 
 function main() {
-  console.log(trap([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]))
+  console.log(trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))
 }
 
 main()
