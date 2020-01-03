@@ -18,7 +18,7 @@ The order of your output does not matter.
  * @return {string[][]}
  */
 function groupAnagrams(strs) {
-  // We can also change the way to generate the key for each word. One way is to count the number of letters in a word. Eg., cat generate a1c1t1, apple becomes a1p2l1e1
+  // We can also change the way to generate the key for each word. One way is to count the number of letters in a word. Eg., cat generates a1c1t1, apple generates a1p2l1e1
   const generateKey = str => {
     const lettersCount = new Array(26).fill(0)
     for (let i = 0; i < str.length; i++) {
