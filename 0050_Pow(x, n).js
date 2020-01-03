@@ -26,19 +26,17 @@ n is a 32-bit signed integer, within the range [−231, 231 − 1]
 function myPow(x, n) {
   const quickPow = (a, b) => {
     let result = 1
+    let base = a
     while (b) {
       if (b & 1) {
-        result
+        result *= base
+        b--
       }
+      base *= base
+      b /= 2 // Avoid using bit operation here to prevent overflow.
     }
-    if (!b) {
-      return 1
-    }
-    if (b & 1) {
-      return a * quickPow(a, b - 1)
-    }
-    const temp = quickPow(a, b >> 1)
-    return temp * temp
+
+    return result
   }
 
   const exp = n >= 0 ? n : -n
@@ -51,7 +49,7 @@ function myPow(x, n) {
 }
 
 function main() {
-  console.log(myPow(2, -2))
+  console.log(myPow(1, -2147483648))
 }
 
 main()
