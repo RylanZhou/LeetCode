@@ -1,15 +1,10 @@
-function FindGreatestSumOfSubArray(array = []) {
-  let currentSum = array[0]
-  let result = array[0]
-  for (let i = 1, len = array.length; i < len; i++) {
-    currentSum += array[i]
-    result = Math.max(result, currentSum)
-    if (currentSum < 0) {
-      currentSum = 0
+const removeDuplicates = (arr) => {
+  let last = 0
+  for (let i = 0, len = arr.length; i < len; i++) {
+    while (arr[i] === arr[last]) {
+      i++
     }
+    arr[++last] = arr[i]
   }
-
-  return result
+  arr.splice(last, arr.length - last)
 }
-
-console.log(FindGreatestSumOfSubArray([6, -3, -2, 7, -15, 1, 2, 2]))
