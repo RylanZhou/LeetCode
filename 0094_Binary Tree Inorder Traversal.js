@@ -28,22 +28,18 @@ function inorderTraversal(root) {
   if (!root) {
     return []
   }
+
+  // For any valid BST, its inorder sequence is ascending.
   const result = []
-  const stack = [root]
-  while (stack.length) {
-    const node = stack.pop()
-    if (node.right) {
-      stack.push(node.right)
-      node.right = null
+  const stack = []
+  while (root || stack.length) {
+    while (root) {
+      stack.push(root)
+      root = root.left
     }
-    stack.push(node)
-    if (node.left) {
-      stack.push(node.left)
-      node.left = null
-    } else {
-      result.push(node.val)
-      stack.pop()
-    }
+    root = stack.pop()
+    result.push(root)
+    root = root.right
   }
 
   return result
