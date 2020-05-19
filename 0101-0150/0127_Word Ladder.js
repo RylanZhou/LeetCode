@@ -90,4 +90,75 @@ function ladderLength(beginWord, endWord, wordList) {
   return 0
 }
 
-console.log(ladderLength('hit', 'cog', ['hot', 'dot', 'dog', 'lot', 'log']))
+/**
+ * @param {string} beginWord
+ * @param {string} endWord
+ * @param {string[]} wordList
+ * @return {number}
+ */
+function ladderLengthII(beginWord, endWord, wordList) {
+  if (!wordList.includes(endWord)) {
+    return 0
+  }
+
+  const len = wordList.length
+  const genericMap = {}
+
+  const doVisit = (queue, visitedMap, anotherVisitedMap) => {
+    const [word, level] = queue.shift()
+    for (let i = 0; i < len; i++) {
+      const newWord = `${word.substring(0, i)}*${word.substring(i + 1)}`
+      if (newWord in genericMap) {
+        for (const nextWord of genericMap[newWord]) {
+          // Already visited this nextWord
+          if (nextWord in anotherVisitedMap) {
+            return level + anotherVisitedMap[nextWord]
+          }
+          // Not visited yet
+          if (!(nextWord in visitedMap)) {
+            // Level increase
+            visitedMap[nextWord] = level + 1
+            queue.push([nextWord, level + 1])
+          }
+        }
+      }
+    }
+    return 0
+  }
+
+  for (const word of wordList) {
+    for (let i = 0; i < len; i++) {
+      // Replace each character with * to generate generic word
+      // e.g. *ot, h*t, ho*
+      const newWord = `${word.substring(0, i)}*${word.substring(i + 1)}`
+      if (newWord in genericMap) {
+        genericMap[newWord].push(word)
+      } else {
+        genericMap[newWord] = [word]
+      }
+    }
+  }
+
+  // Bidirectional BFS
+  const queueBegin = [[beginWord, 1]] // BFS starting from beginWord
+  const queueEnd = [[endWord, 1]] // BFS starting from endWord
+  const visitedBeginMap = { [beginWord]: 1 } // 1 also indicates the level
+  const visitedEndMap = { [endWord]: 1 }
+  while (queueBegin.length && queueEnd.length) {
+    // One level deeper from beginWord
+    let level = doVisit(queueBegin, visitedBeginMap, visitedEndMap)
+    if (level) {
+      return level
+    }
+    level = doVisit(queueEnd, visitedEndMap, visitedBeginMap)
+    if (level) {
+      return level
+    }
+  }
+
+  return 0
+}
+
+console.log(
+  ladderLengthII('hit', 'cog', ['hot', 'dot', 'dog', 'lot', 'log', 'cog'])
+)
